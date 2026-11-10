@@ -39,13 +39,38 @@ async def lifespan(_app):
         notify.start_sla_watcher()
         refdata.start_sync_loop()
         connectors.start_scheduler(_start)
-        if os.getenv("DEMO_SEED", "").lower() in ("1", "true", "yes"):
-            threading.Thread(target=_seed_demo_runs, daemon=True).start()
+        _start_seed()
     yield
 
 
+# Opening data. DEMO_SEED: "few" (default) seeds a handful of runs, "all" every sample, "off" nothing.
+# The "few" set deliberately leaves out the samples shown live in the demo (clean Northwind invoice,
+# disguised duplicate, bank change, learning pair), so those still behave as expected when run on top.
+SEED_FEW = [
+    "03_edge_split_billing_meridian.pdf",            # needs review: Procurement
+    "04_edge_no_po_partial_receipt_crestline.pdf",   # needs review: PO inferred, short receipt
+    "07_extra_suspended_vendor_orion.pdf",           # rejected
+    "10_extra_foreign_currency_eur.pdf",             # approved, EUR -> USD
+    "14_type_services_discount_brightline.pdf",      # approved, early-pay discount
+    "17_type_non_po_utility_metro.pdf",              # approved, non-PO bill
+]
+
+
+def _seed_mode() -> str:
+    v = os.getenv("DEMO_SEED", "few").strip().lower()
+    if v in ("0", "false", "no", "off", "none"):
+        return "off"
+    return "all" if v == "all" else "few"
+
+
+def _start_seed() -> None:
+    if os.getenv("ZAMP_NO_WORKERS") or _seed_mode() == "off":
+        return
+    threading.Thread(target=_seed_demo_runs, daemon=True).start()
+
+
 def _seed_demo_runs() -> None:
-    """Fresh deploy with an empty DB: process every sample invoice once so the app opens with data.
+    """Empty DB: process sample invoices so the dashboard and review queue open with data.
 
     Samples run one at a time, in catalog order, because some depend on earlier ones
     (learned date format, deposit then final invoice, duplicate of an already-paid invoice).
@@ -55,6 +80,8 @@ def _seed_demo_runs() -> None:
     if db.list_runs(limit=1):
         return
     catalog = json.loads((config.SAMPLES_DIR / "catalog.json").read_text(encoding="utf-8"))
+    if _seed_mode() == "few":
+        catalog = [c for c in catalog if c["file"] in SEED_FEW]
     db.audit(None, "system", "demo_seed", f"seeding {len(catalog)} sample invoices")
     for item in catalog:
         src = config.SAMPLES_DIR / item["file"]
@@ -900,6 +927,7 @@ def put_settings(values: dict):
 @app.post("/api/reset")
 def reset():
     db.reset_demo()
+    _start_seed()  # reopen with the same starter data a fresh start has
     return {"ok": True}
 
 

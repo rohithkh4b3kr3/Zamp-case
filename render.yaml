@@ -17,6 +17,6 @@ services:
       - key: EXTRACTION_MODE
         value: auto
       - key: DEMO_SEED
-        value: "true"   # empty DB on boot -> process all sample invoices so the app opens with data
+        value: "few"   # empty DB on boot -> process 6 starter invoices so the dashboard and review queue open with data ("all" = every sample, "off" = none)
       - key: ANTHROPIC_API_KEY
         sync: false   # optional: paste a key in the Render dashboard to enable Claude extraction

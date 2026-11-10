@@ -24,7 +24,15 @@ function StatusChip({ value, good }: { value: string; good: boolean }) {
 }
 
 /** Invoices processed against a PO; each chip opens that run (the extracted-invoice page). */
-function PoInvoices({ runs }: { runs: RunSummary[] }) {
+function PoInvoices({ runs: all }: { runs: RunSummary[] }) {
+  // one chip per invoice: re-runs of the same invoice collapse to the latest run
+  const latest = new Map<string, RunSummary>();
+  for (const r of all) {
+    const key = r.invoice_number || r.id;
+    const prev = latest.get(key);
+    if (!prev || r.created_at > prev.created_at) latest.set(key, r);
+  }
+  const runs = [...latest.values()].sort((a, b) => b.created_at.localeCompare(a.created_at));
   if (!runs.length) return <span className="text-xs text-slate-400">—</span>;
   const shown = runs.slice(0, 3);
   return (
