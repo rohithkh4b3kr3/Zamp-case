@@ -2,13 +2,13 @@ import clsx from "clsx";
 import { ChevronRight, History, Search, Upload, X } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { Link } from "react-router-dom";
-import { api, fmtMoney } from "../api";
+import { Link, useNavigate } from "react-router-dom";
+import { api, fmtMoney, type RunSummary } from "../api";
 import ImportWizard from "../components/ImportWizard";
 import PoLinesPanel from "../components/PoLinesPanel";
 import RefHistory from "../components/RefHistory";
 import RefSources from "../components/RefSources";
-import { Empty, SkeletonRows, Tabs } from "../components/ui";
+import { Empty, SkeletonRows, Tabs, decisionMeta } from "../components/ui";
 
 type Tab = "pos" | "vendors" | "ledger" | "sources" | "fx";
 
@@ -23,6 +23,29 @@ function StatusChip({ value, good }: { value: string; good: boolean }) {
   );
 }
 
+/** Invoices processed against a PO; each chip opens that run (the extracted-invoice page). */
+function PoInvoices({ runs }: { runs: RunSummary[] }) {
+  if (!runs.length) return <span className="text-xs text-slate-400">—</span>;
+  const shown = runs.slice(0, 3);
+  return (
+    <div className="flex flex-wrap items-center gap-1">
+      {shown.map((r) => (
+        <Link
+          key={r.id}
+          to={`/runs/${r.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="pill num transition-colors hover:border-brand-500 hover:text-brand-700"
+          title={`${r.vendor_name || r.filename} · ${fmtMoney(r.total, r.currency || "USD")} · ${r.decision ? decisionMeta[r.decision].label : r.status}`}
+        >
+          <span className={clsx("h-1.5 w-1.5 shrink-0 rounded-full", r.decision ? decisionMeta[r.decision].dot : "bg-slate-400")} />
+          {r.invoice_number || r.filename}
+        </Link>
+      ))}
+      {runs.length > shown.length && <span className="text-xs text-slate-400">+{runs.length - shown.length}</span>}
+    </div>
+  );
+}
+
 export default function Reference() {
   const [ref, setRef] = useState<any>(null);
   const [tab, setTab] = useState<Tab>("pos");
@@ -32,6 +55,8 @@ export default function Reference() {
   const [history, setHistory] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [sourceCount, setSourceCount] = useState<number | undefined>(undefined);
+  const [runs, setRuns] = useState<RunSummary[]>([]);
+  const nav = useNavigate();
   const reload = () => api.reference().then(setRef).catch(() => {});
   const notify = (msg: string) => {
     setToast(msg);
@@ -41,13 +66,21 @@ export default function Reference() {
 
   useEffect(() => {
     api.refSources().then((s) => setSourceCount(s.length)).catch(() => {});
-    const load = () => api.reference().then(setRef).catch(() => {});
+    const load = () => {
+      api.reference().then(setRef).catch(() => {});
+      api.runs().then(setRuns).catch(() => {});
+    };
     load();
     const t = setInterval(load, 4000);
     return () => clearInterval(t);
   }, []);
 
   const s = q.trim().toLowerCase();
+  // newest first; a PO can carry several invoices (split billing, deposits, credit notes)
+  const runsByPo = runs.reduce<Record<string, RunSummary[]>>((m, r) => {
+    if (r.po_number) (m[r.po_number] ||= []).push(r);
+    return m;
+  }, {});
   const vendorName = (id: string) => ref?.vendors.find((v: any) => v.vendor_id === id)?.name;
   const pos = (ref?.purchase_orders || []).filter((p: any) => has(s, p.po_number, p.vendor_name, p.requester));
   const vendors = (ref?.vendors || []).filter((v: any) => has(s, v.vendor_id, v.name, v.tax_id, v.email, ...(v.aliases || [])));
@@ -98,11 +131,12 @@ export default function Reference() {
                 <th>Date</th>
                 <th className="w-56">Billed</th>
                 <th className="text-right">Remaining</th>
+                <th>Invoices</th>
                 <th>Status</th>
               </tr>
             </thead>
             {!ref ? (
-              <SkeletonRows cols={8} />
+              <SkeletonRows cols={9} />
             ) : (
               <tbody>
                 {pos.map((p: any) => {
@@ -138,6 +172,9 @@ export default function Reference() {
                           <span className="text-xs text-slate-400"> / {fmtMoney(p.total)}</span>
                         </td>
                         <td>
+                          <PoInvoices runs={runsByPo[p.po_number] || []} />
+                        </td>
+                        <td>
                           <div className="flex items-center gap-1.5">
                             <StatusChip value={p.status} good={p.status === "open"} />
                             {short && <span className="chip bg-amber-50 text-amber-800">Partly received</span>}
@@ -146,7 +183,7 @@ export default function Reference() {
                       </tr>
                       {isOpen && (
                         <tr className="hover:bg-transparent">
-                          <td colSpan={8} className="bg-slate-50/60 px-4 py-3 pl-12">
+                          <td colSpan={9} className="bg-slate-50/60 px-4 py-3 pl-12">
                             <PoLinesPanel po={p} onChanged={notify} />
                           </td>
                         </tr>
@@ -242,7 +279,14 @@ export default function Reference() {
             ) : (
               <tbody>
                 {ledger.map((e: any) => (
-                  <tr key={e.id}>
+                  <tr
+                    key={e.id}
+                    tabIndex={e.run_id ? 0 : undefined}
+                    onClick={() => e.run_id && nav(`/runs/${e.run_id}`)}
+                    onKeyDown={(k) => k.key === "Enter" && e.run_id && nav(`/runs/${e.run_id}`)}
+                    className={clsx(e.run_id && "cursor-pointer focus:outline-none focus-visible:bg-slate-50")}
+                    title={e.run_id ? "Open the extracted invoice" : undefined}
+                  >
                     <td className="num whitespace-nowrap font-medium text-slate-900">{e.invoice_number}</td>
                     <td className="max-w-[240px] truncate">{vendorName(e.vendor_id)}</td>
                     <td className="num whitespace-nowrap text-slate-600">{e.po_number || "—"}</td>
@@ -253,7 +297,7 @@ export default function Reference() {
                       <StatusChip value={e.status} good={e.status === "paid" || e.status === "approved" || e.status === "posted"} />
                     </td>
                     <td className="whitespace-nowrap text-slate-500">
-                      {e.source === "seed" ? "Historical" : <Link className="font-medium text-brand-600 hover:underline" to={`/runs/${e.run_id}`}>AP Autopilot</Link>}
+                      {e.source === "seed" ? "Historical" : <Link className="font-medium text-brand-600 hover:underline" to={`/runs/${e.run_id}`} onClick={(ev) => ev.stopPropagation()}>AP Autopilot</Link>}
                     </td>
                   </tr>
                 ))}

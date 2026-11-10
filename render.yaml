@@ -7,8 +7,16 @@ services:
     plan: free
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
+    branch: main
+    autoDeploy: true   # every push to main rebuilds and redeploys
     envVars:
+      - key: OPENAI_API_KEY
+        sync: false   # paste your key in the Render dashboard; never commit it
+      - key: OPENAI_MODEL
+        value: gpt-5-mini
       - key: EXTRACTION_MODE
         value: auto
+      - key: DEMO_SEED
+        value: "true"   # empty DB on boot -> process all sample invoices so the app opens with data
       - key: ANTHROPIC_API_KEY
         sync: false   # optional: paste a key in the Render dashboard to enable Claude extraction

@@ -39,7 +39,40 @@ async def lifespan(_app):
         notify.start_sla_watcher()
         refdata.start_sync_loop()
         connectors.start_scheduler(_start)
+        if os.getenv("DEMO_SEED", "").lower() in ("1", "true", "yes"):
+            threading.Thread(target=_seed_demo_runs, daemon=True).start()
     yield
+
+
+def _seed_demo_runs() -> None:
+    """Fresh deploy with an empty DB: process every sample invoice once so the app opens with data.
+
+    Samples run one at a time, in catalog order, because some depend on earlier ones
+    (learned date format, deposit then final invoice, duplicate of an already-paid invoice).
+    """
+    import time
+
+    if db.list_runs(limit=1):
+        return
+    catalog = json.loads((config.SAMPLES_DIR / "catalog.json").read_text(encoding="utf-8"))
+    db.audit(None, "system", "demo_seed", f"seeding {len(catalog)} sample invoices")
+    for item in catalog:
+        src = config.SAMPLES_DIR / item["file"]
+        if not src.exists():
+            continue
+        dest = config.UPLOAD_DIR / f"{uuid.uuid4().hex[:8]}_{src.name}"
+        shutil.copyfile(src, dest)
+        try:
+            res = _start(dest, src.name, "sample")
+        except Exception as e:  # one bad sample must not stop the rest
+            db.audit(None, "system", "demo_seed_error", f"{src.name}: {e}")
+            continue
+        ids = res.get("ids") or [res["id"]]
+        deadline = time.monotonic() + 300
+        while time.monotonic() < deadline:
+            if all((db.get_run(i) or {}).get("status") not in ("queued", "running") for i in ids):
+                break
+            time.sleep(1)
 
 
 app = FastAPI(title="Zamp AP — Invoice to Decision", version="1.1.0", lifespan=lifespan)
