@@ -1,0 +1,30 @@
+# secrets: never commit (use .env.example as the template)
+.env
+.env.*
+!.env.example
+backend/.env
+
+# local runtime data
+backend/storage/
+*.db
+*.db-wal
+*.db-shm
+*.log
+
+# python
+backend/.venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

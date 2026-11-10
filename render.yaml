@@ -1,0 +1,14 @@
+# One-click deploy on Render (render.com -> New -> Blueprint -> pick this repo).
+# Free tier sleeps when idle and has an ephemeral disk: run history resets on redeploy (fine for a demo).
+services:
+  - type: web
+    name: ap-autopilot
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: EXTRACTION_MODE
+        value: auto
+      - key: ANTHROPIC_API_KEY
+        sync: false   # optional: paste a key in the Render dashboard to enable Claude extraction

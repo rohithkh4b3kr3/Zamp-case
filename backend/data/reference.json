@@ -1,0 +1,758 @@
+{
+  "company": {
+    "name": "Lumen Retail Group Inc.",
+    "address": "500 Market Street, San Francisco, CA 94105",
+    "ap_email": "ap@lumenretail.example",
+    "base_currency": "USD"
+  },
+  "fx_rates": {
+    "as_of": "2026-11-09",
+    "source": "Treasury month-end rate table",
+    "to_usd": {
+      "USD": 1,
+      "EUR": 1.0815,
+      "GBP": 1.271,
+      "CAD": 0.729,
+      "INR": 0.01192
+    }
+  },
+  "teams": {
+    "Treasury & Security": {
+      "email": "treasury@lumenretail.example",
+      "slack": "#ap-treasury-alerts",
+      "sla_setting": "sla_treasury_hours"
+    },
+    "Procurement": {
+      "email": "procurement@lumenretail.example",
+      "slack": "#procurement",
+      "sla_setting": "sla_procurement_hours"
+    },
+    "Receiving": {
+      "email": "receiving@lumenretail.example",
+      "slack": "#warehouse-receiving",
+      "sla_setting": "sla_default_hours"
+    },
+    "AP Specialist": {
+      "email": "ap-exceptions@lumenretail.example",
+      "slack": "#ap-exceptions",
+      "sla_setting": "sla_default_hours"
+    },
+    "Finance Manager": {
+      "email": "finance-manager@lumenretail.example",
+      "slack": "#finance-approvals",
+      "sla_setting": "sla_default_hours"
+    }
+  },
+  "vendors": [
+    {
+      "vendor_id": "V-1001",
+      "name": "Northwind Office Supplies Inc.",
+      "aliases": [
+        "Northwind Office Supplies",
+        "Northwind Supplies",
+        "NW Office Supplies"
+      ],
+      "tax_id": "94-3318275",
+      "status": "approved",
+      "payment_terms": "Net 30",
+      "currency": "USD",
+      "email": "billing@northwind-supplies.example",
+      "phone": "+1 (415) 555-0142",
+      "bank": {
+        "bank_name": "Pacific Coast Bank",
+        "account_number": "000123454321",
+        "routing_number": "121000358"
+      }
+    },
+    {
+      "vendor_id": "V-1002",
+      "name": "Bluepeak Cloud Services LLC",
+      "aliases": [
+        "Bluepeak Cloud Services",
+        "Bluepeak Cloud",
+        "BluePeak"
+      ],
+      "tax_id": "82-4410937",
+      "status": "approved",
+      "payment_terms": "Net 30",
+      "currency": "USD",
+      "email": "accounts@bluepeak.example",
+      "phone": "+1 (206) 555-0199",
+      "bank": {
+        "bank_name": "Cascade National Bank",
+        "account_number": "4100288817781",
+        "routing_number": "125000024"
+      }
+    },
+    {
+      "vendor_id": "V-1003",
+      "name": "Meridian Logistics Co.",
+      "aliases": [
+        "Meridian Logistics",
+        "Meridian Freight",
+        "Meridian Logistics Company"
+      ],
+      "tax_id": "77-2056648",
+      "status": "approved",
+      "payment_terms": "Net 15",
+      "currency": "USD",
+      "email": "ar@meridianlogistics.example",
+      "phone": "+1 (312) 555-0110",
+      "bank": {
+        "bank_name": "Lakeshore Trust",
+        "account_number": "880021334590",
+        "routing_number": "071000013"
+      }
+    },
+    {
+      "vendor_id": "V-1004",
+      "name": "Crestline Industrial Parts",
+      "aliases": [
+        "Crestline Industrial",
+        "Crestline Parts",
+        "Crestline Industrial Parts Corp."
+      ],
+      "tax_id": "36-4471120",
+      "status": "approved",
+      "payment_terms": "Net 45",
+      "currency": "USD",
+      "email": "invoices@crestline-parts.example",
+      "phone": "+1 (773) 555-0187",
+      "bank": {
+        "bank_name": "Midwest Commerce Bank",
+        "account_number": "551200784412",
+        "routing_number": "071923909"
+      }
+    },
+    {
+      "vendor_id": "V-1005",
+      "name": "Orion Facilities Management",
+      "aliases": [
+        "Orion Facilities",
+        "Orion FM"
+      ],
+      "tax_id": "45-9902113",
+      "status": "suspended",
+      "status_reason": "Suspended 2026-09-30 by Procurement: expired certificate of insurance; contract under review.",
+      "payment_terms": "Net 30",
+      "currency": "USD",
+      "email": "billing@orionfm.example",
+      "phone": "+1 (617) 555-0163",
+      "bank": {
+        "bank_name": "Harborview Savings",
+        "account_number": "330019920045",
+        "routing_number": "011000138"
+      }
+    },
+    {
+      "vendor_id": "V-1006",
+      "name": "Harbor Print & Signage",
+      "aliases": [
+        "Harbor Print and Signage",
+        "Harbor Print",
+        "Harbor Print & Sign"
+      ],
+      "tax_id": "91-6620394",
+      "status": "approved",
+      "payment_terms": "Net 30",
+      "currency": "USD",
+      "email": "studio@harborprint.example",
+      "phone": "+1 (503) 555-0129",
+      "bank": {
+        "bank_name": "Pacific Coast Bank",
+        "account_number": "000777120934",
+        "routing_number": "121000358"
+      }
+    },
+    {
+      "vendor_id": "V-1007",
+      "name": "Atelier Nord GmbH",
+      "aliases": [
+        "Atelier Nord",
+        "Atelier Nord Design"
+      ],
+      "tax_id": "DE312456789",
+      "status": "approved",
+      "payment_terms": "Net 30",
+      "currency": "EUR",
+      "email": "rechnung@ateliernord.example",
+      "phone": "+49 40 5550 1844",
+      "bank": {
+        "bank_name": "Nordsee Bank AG",
+        "account_number": "DE89370400440532013000",
+        "routing_number": null
+      }
+    },
+    {
+      "vendor_id": "V-1008",
+      "name": "Metro Power & Light",
+      "aliases": [
+        "Metro Power",
+        "Metro Power and Light"
+      ],
+      "tax_id": "36-4471902",
+      "status": "approved",
+      "payment_terms": "Net 15",
+      "currency": "USD",
+      "email": "billing@metropower.example",
+      "phone": "+1 (415) 555-0190",
+      "bank": {
+        "bank_name": "First Bay Bank",
+        "account_number": "000778812055",
+        "routing_number": "121042882"
+      },
+      "po_required": false,
+      "category": "Utilities",
+      "cost_center": "CC-410 Facilities",
+      "non_po_limit": 5000
+    },
+    {
+      "vendor_id": "V-1009",
+      "name": "Keystone Fabrication Ltd",
+      "aliases": [
+        "Keystone Fabrication",
+        "Keystone Fab"
+      ],
+      "tax_id": "52-8810374",
+      "status": "approved",
+      "payment_terms": "Net 30",
+      "currency": "USD",
+      "email": "accounts@keystonefab.example",
+      "phone": "+1 (412) 555-0133",
+      "bank": {
+        "bank_name": "Allegheny Trust",
+        "account_number": "000455190873",
+        "routing_number": "043000096"
+      }
+    },
+    {
+      "vendor_id": "V-1010",
+      "name": "Brightline Advisory LLC",
+      "aliases": [
+        "Brightline Advisory",
+        "Brightline"
+      ],
+      "tax_id": "27-3390651",
+      "status": "approved",
+      "payment_terms": "2/10 Net 30",
+      "currency": "USD",
+      "email": "billing@brightline-advisory.example",
+      "phone": "+1 (646) 555-0177",
+      "bank": {
+        "bank_name": "Hudson Valley Bank",
+        "account_number": "000610042318",
+        "routing_number": "021000089"
+      }
+    }
+  ],
+  "purchase_orders": [
+    {
+      "po_number": "PO-2026-0412",
+      "vendor_id": "V-1001",
+      "date": "2026-10-02",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Priya Raman (Facilities)",
+      "tax_rate": 0.08,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "NW-CH-220",
+          "description": "Ergonomic mesh office chair",
+          "qty": 40,
+          "unit_price": 185
+        },
+        {
+          "line": 2,
+          "sku": "NW-PP-A4",
+          "description": "A4 copy paper, 80gsm (ream)",
+          "qty": 100,
+          "unit_price": 6.5
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0390",
+      "vendor_id": "V-1001",
+      "date": "2026-09-11",
+      "status": "closed",
+      "currency": "USD",
+      "requester": "Priya Raman (Facilities)",
+      "tax_rate": 0.08,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "NW-DK-160",
+          "description": "Height-adjustable standing desk",
+          "qty": 5,
+          "unit_price": 433.33
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0430",
+      "vendor_id": "V-1002",
+      "date": "2026-10-06",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Daniel Okafor (IT)",
+      "tax_rate": 0.08,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "BP-K8S-ENT",
+          "description": "Managed Kubernetes platform - Q4 2026 subscription",
+          "qty": 1,
+          "unit_price": 15000,
+          "type": "service"
+        },
+        {
+          "line": 2,
+          "sku": "BP-SUP-PRM",
+          "description": "Premium 24x7 support - Q4 2026",
+          "qty": 1,
+          "unit_price": 3000,
+          "type": "service"
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0398",
+      "vendor_id": "V-1003",
+      "date": "2026-09-20",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Elena Vasquez (Supply Chain)",
+      "tax_rate": 0,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "ML-FTL-CHI-DAL",
+          "description": "Full truckload freight Chicago to Dallas (per shipment)",
+          "qty": 3,
+          "unit_price": 4200
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0455",
+      "vendor_id": "V-1004",
+      "date": "2026-10-14",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Marcus Lee (Maintenance)",
+      "tax_rate": 0.08,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "CR-HF-0750",
+          "description": "Hydraulic fitting 3/4 in. stainless",
+          "qty": 500,
+          "unit_price": 12.4
+        },
+        {
+          "line": 2,
+          "sku": "CR-PG-0160",
+          "description": "Pressure gauge 0-160 psi",
+          "qty": 20,
+          "unit_price": 89
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0449",
+      "vendor_id": "V-1004",
+      "date": "2026-10-09",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Marcus Lee (Maintenance)",
+      "tax_rate": 0.08,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "CR-SV-0200",
+          "description": "Pressure relief safety valve 2 in.",
+          "qty": 10,
+          "unit_price": 240
+        },
+        {
+          "line": 2,
+          "sku": "CR-HS-1000",
+          "description": "Hydraulic hose assembly 10 ft",
+          "qty": 25,
+          "unit_price": 64
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0377",
+      "vendor_id": "V-1005",
+      "date": "2026-09-01",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Priya Raman (Facilities)",
+      "tax_rate": 0,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "OR-JAN-MO",
+          "description": "Janitorial services - monthly (HQ)",
+          "qty": 3,
+          "unit_price": 3150
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0461",
+      "vendor_id": "V-1006",
+      "date": "2026-10-18",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Sofia Martins (Marketing)",
+      "tax_rate": 0.08,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "HP-BRO-A5",
+          "description": "Tri-fold brochure A5, full colour",
+          "qty": 2000,
+          "unit_price": 1.15
+        },
+        {
+          "line": 2,
+          "sku": "HP-BAN-6X3",
+          "description": "Vinyl banner 6x3 ft",
+          "qty": 4,
+          "unit_price": 145
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0470",
+      "vendor_id": "V-1006",
+      "date": "2026-10-22",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Sofia Martins (Marketing)",
+      "tax_rate": 0.08,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "HP-POS-A3",
+          "description": "A3 poster, matte, full colour",
+          "qty": 1000,
+          "unit_price": 0.6
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0475",
+      "vendor_id": "V-1007",
+      "date": "2026-10-12",
+      "status": "open",
+      "currency": "EUR",
+      "requester": "Sofia Martins (Marketing)",
+      "tax_rate": 0,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "AN-CON-FIX",
+          "description": "Design consultancy - retail fixture concept",
+          "qty": 1,
+          "unit_price": 9800
+        },
+        {
+          "line": 2,
+          "sku": "AN-PRO-FIX",
+          "description": "Prototype display fixture",
+          "qty": 2,
+          "unit_price": 1450
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0480",
+      "vendor_id": "V-1009",
+      "date": "2026-10-12",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Daniel Okafor (Store Design)",
+      "tax_rate": 0.08,
+      "prepayment_pct": 30,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "KF-DSP-12",
+          "description": "Custom steel display fixture",
+          "qty": 12,
+          "unit_price": 1250
+        }
+      ]
+    },
+    {
+      "po_number": "PO-2026-0485",
+      "vendor_id": "V-1010",
+      "date": "2026-10-20",
+      "status": "open",
+      "currency": "USD",
+      "requester": "Elena Vasquez (Supply Chain)",
+      "tax_rate": 0,
+      "lines": [
+        {
+          "line": 1,
+          "sku": "BA-RET-11",
+          "description": "Process advisory - November retainer",
+          "qty": 1,
+          "unit_price": 9600,
+          "type": "service"
+        },
+        {
+          "line": 2,
+          "sku": "BA-WKS-DAY",
+          "description": "Workshop facilitation (days)",
+          "qty": 2,
+          "unit_price": 1800,
+          "type": "service"
+        }
+      ]
+    }
+  ],
+  "goods_receipts": [
+    {
+      "grn": "GRN-88415",
+      "po_number": "PO-2026-0470",
+      "date": "2026-10-30",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 1000
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88420",
+      "po_number": "PO-2026-0475",
+      "date": "2026-11-04",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 1
+        },
+        {
+          "line": 2,
+          "qty_received": 2
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88120",
+      "po_number": "PO-2026-0412",
+      "date": "2026-10-21",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 40
+        },
+        {
+          "line": 2,
+          "qty_received": 100
+        }
+      ]
+    },
+    {
+      "grn": "GRN-87455",
+      "po_number": "PO-2026-0390",
+      "date": "2026-09-25",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 5
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88201",
+      "po_number": "PO-2026-0430",
+      "date": "2026-10-07",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 1
+        },
+        {
+          "line": 2,
+          "qty_received": 1
+        }
+      ]
+    },
+    {
+      "grn": "GRN-87901",
+      "po_number": "PO-2026-0398",
+      "date": "2026-10-03",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 1
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88044",
+      "po_number": "PO-2026-0398",
+      "date": "2026-10-17",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 1
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88309",
+      "po_number": "PO-2026-0398",
+      "date": "2026-11-01",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 1
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88350",
+      "po_number": "PO-2026-0455",
+      "date": "2026-11-03",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 500
+        },
+        {
+          "line": 2,
+          "qty_received": 12
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88402",
+      "po_number": "PO-2026-0449",
+      "date": "2026-11-05",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 10
+        },
+        {
+          "line": 2,
+          "qty_received": 25
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88377",
+      "po_number": "PO-2026-0461",
+      "date": "2026-11-04",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 2000
+        },
+        {
+          "line": 2,
+          "qty_received": 4
+        }
+      ]
+    },
+    {
+      "grn": "GRN-88502",
+      "po_number": "PO-2026-0480",
+      "date": "2026-11-05",
+      "lines": [
+        {
+          "line": 1,
+          "qty_received": 12
+        }
+      ]
+    }
+  ],
+  "invoice_ledger": [
+    {
+      "invoice_number": "INV-NW-10482",
+      "vendor_id": "V-1001",
+      "po_number": "PO-2026-0390",
+      "invoice_date": "2026-09-28",
+      "subtotal": 2166.65,
+      "tax": 173.33,
+      "total": 2339.98,
+      "status": "paid",
+      "source": "seed",
+      "lines": [
+        {
+          "po_line": 1,
+          "qty": 5,
+          "amount": 2166.65
+        }
+      ]
+    },
+    {
+      "invoice_number": "ML-24-0917",
+      "vendor_id": "V-1003",
+      "po_number": "PO-2026-0398",
+      "invoice_date": "2026-10-05",
+      "subtotal": 4200,
+      "tax": 0,
+      "total": 4200,
+      "status": "paid",
+      "source": "seed",
+      "lines": [
+        {
+          "po_line": 1,
+          "qty": 1,
+          "amount": 4200
+        }
+      ]
+    },
+    {
+      "invoice_number": "ML-24-0988",
+      "vendor_id": "V-1003",
+      "po_number": "PO-2026-0398",
+      "invoice_date": "2026-10-19",
+      "subtotal": 4200,
+      "tax": 0,
+      "total": 4200,
+      "status": "approved",
+      "source": "seed",
+      "lines": [
+        {
+          "po_line": 1,
+          "qty": 1,
+          "amount": 4200
+        }
+      ]
+    },
+    {
+      "invoice_number": "MPL-2026-09",
+      "vendor_id": "V-1008",
+      "po_number": null,
+      "invoice_date": "2026-09-15",
+      "subtotal": 1109.44,
+      "tax": 88.76,
+      "total": 1198.2,
+      "status": "paid",
+      "source": "seed",
+      "lines": []
+    },
+    {
+      "invoice_number": "MPL-2026-10",
+      "vendor_id": "V-1008",
+      "po_number": null,
+      "invoice_date": "2026-10-15",
+      "subtotal": 1171.99,
+      "tax": 93.76,
+      "total": 1265.75,
+      "status": "paid",
+      "source": "seed",
+      "lines": []
+    }
+  ]
+}

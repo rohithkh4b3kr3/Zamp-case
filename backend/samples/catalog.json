@@ -1,0 +1,121 @@
+[
+  {
+    "file": "01_happy_northwind.pdf",
+    "title": "Clean invoice, explicit PO",
+    "kind": "happy",
+    "expected": "APPROVED",
+    "story": "Machine-readable PDF, PO referenced, prices/quantities match PO and goods receipt, math checks out."
+  },
+  {
+    "file": "02_scanned_harbor.pdf",
+    "title": "Scanned image invoice",
+    "kind": "happy",
+    "expected": "APPROVED",
+    "story": "No text layer: the page is a skewed, noisy scan. The OCR path reads it, then the same checks run."
+  },
+  {
+    "file": "03_edge_split_billing_meridian.pdf",
+    "title": "Split billing overruns the PO",
+    "kind": "edge",
+    "expected": "NEEDS_REVIEW",
+    "story": "Third invoice against a 3-shipment PO. The shipment itself is fine, but an unplanned detention charge pushes cumulative billing past the PO value."
+  },
+  {
+    "file": "04_edge_no_po_partial_receipt_crestline.pdf",
+    "title": "No PO reference + partial receipt",
+    "kind": "edge",
+    "expected": "NEEDS_REVIEW",
+    "story": "Vendor omitted the PO. The process infers it from vendor, part numbers and amounts, then finds a small price drift (within tolerance) and 8 gauges billed that were never received."
+  },
+  {
+    "file": "05_edge_duplicate_northwind.pdf",
+    "title": "Disguised duplicate",
+    "kind": "edge",
+    "expected": "REJECTED",
+    "story": "A 'payment reminder' re-sends an invoice already paid in September, with the number reformatted (NW10482 vs INV-NW-10482)."
+  },
+  {
+    "file": "06_edge_bank_change_bluepeak.pdf",
+    "title": "Bank details changed on invoice",
+    "kind": "edge",
+    "expected": "NEEDS_REVIEW",
+    "story": "Everything matches the PO perfectly, but the remit-to account differs from the vendor master and the invoice pressures for urgent payment: a classic payment-fraud pattern."
+  },
+  {
+    "file": "07_extra_suspended_vendor_orion.pdf",
+    "title": "Suspended vendor",
+    "kind": "extra",
+    "expected": "REJECTED",
+    "story": "Valid PO and correct amounts, but the vendor was suspended by Procurement."
+  },
+  {
+    "file": "08_extra_missing_fields_harbor.pdf",
+    "title": "Missing invoice number and date",
+    "kind": "extra",
+    "expected": "REJECTED",
+    "story": "A 'statement of charges' with no invoice number or date cannot be posted; the process drafts a request for a corrected invoice."
+  },
+  {
+    "file": "09_extra_multi_invoice_batch_crestline.pdf",
+    "title": "Two invoices in one PDF",
+    "kind": "extra",
+    "expected": "APPROVED",
+    "story": "A 3-page scan batch holding two invoices (the second runs over two pages). Pages are classified and split, and each invoice gets its own run and decision."
+  },
+  {
+    "file": "10_extra_foreign_currency_eur.pdf",
+    "title": "Foreign currency (EUR)",
+    "kind": "extra",
+    "expected": "APPROVED",
+    "story": "German vendor billing in euros with European formats (12.700,00 \u20ac, 06.11.2026, IBAN). Converted to USD for the approval limit."
+  },
+  {
+    "file": "11_learn_dates_harbor_first.pdf",
+    "title": "Learning 1/2: day-first date",
+    "kind": "learning",
+    "expected": "NEEDS_REVIEW",
+    "story": "Harbor writes 03/11/2026 meaning 3 Nov. Read US-style it looks 8 months old and is held. Correct the date once: the format is learned."
+  },
+  {
+    "file": "12_learn_dates_harbor_second.pdf",
+    "title": "Learning 2/2: rule applied",
+    "kind": "learning",
+    "expected": "APPROVED",
+    "story": "Next Harbor invoice dated 07/11/2026. After the correction above, the learned rule reads it as 7 Nov automatically (not 11 July)."
+  },
+  {
+    "file": "13_type_credit_note_northwind.pdf",
+    "title": "Credit note",
+    "kind": "extra",
+    "expected": "NEEDS_REVIEW",
+    "story": "Northwind credits one damaged desk from paid invoice INV-NW-10482. Matched to the original; AP applies it against payables, nothing is paid out."
+  },
+  {
+    "file": "14_type_services_discount_brightline.pdf",
+    "title": "Services invoice + early-pay discount",
+    "kind": "extra",
+    "expected": "APPROVED",
+    "story": "Consulting retainer and workshop days: no goods receipt exists, so it is a 2-way match to the PO. Terms 2/10 Net 30, so payment is scheduled for the discount date."
+  },
+  {
+    "file": "15_type_deposit_keystone.pdf",
+    "title": "Deposit (prepayment) invoice",
+    "kind": "extra",
+    "expected": "APPROVED",
+    "story": "A 30% advance on a fabrication PO, billed before delivery. Checked against the PO's agreed deposit instead of goods received."
+  },
+  {
+    "file": "16_type_final_after_deposit_keystone.pdf",
+    "title": "Final invoice after deposit",
+    "kind": "extra",
+    "expected": "APPROVED",
+    "story": "Run after the deposit: the full PO value is billed on delivery, and the 4,500 deposit already paid is deducted from the amount to pay."
+  },
+  {
+    "file": "17_type_non_po_utility_metro.pdf",
+    "title": "Non-PO utility bill",
+    "kind": "extra",
+    "expected": "APPROVED",
+    "story": "Electricity has no PO. The vendor master marks it non-PO: checked against the usual monthly amount and the non-PO spend limit instead."
+  }
+]

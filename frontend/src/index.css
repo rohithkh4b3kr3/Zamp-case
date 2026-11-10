@@ -1,0 +1,60 @@
+@import "./theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { background-color: rgb(var(--page)); }
+  body {
+    @apply min-h-screen text-[14px] leading-normal text-slate-800 antialiased;
+    background-color: rgb(var(--page));
+  }
+  /* Inter alternates: open digits, single-storey a */
+  body { font-feature-settings: "cv11", "ss01"; }
+  ::selection { background: rgb(var(--brand-500) / .25); }
+  :focus-visible { outline: 2px solid rgb(var(--brand-500) / .6); outline-offset: 2px; }
+  * { scrollbar-color: rgb(var(--slate-300)) transparent; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white;
+    box-shadow: 0 1px 2px rgb(var(--shadow) / .04);
+  }
+  .skeleton { @apply animate-pulse rounded-md bg-slate-100; }
+  .num { @apply tabular-nums; }
+  .glass {
+    @apply border border-slate-200/80 bg-white/75 backdrop-blur-xl backdrop-saturate-150;
+    box-shadow: 0 8px 24px -12px rgb(var(--shadow) / .16);
+  }
+  .dark .glass {
+    box-shadow: 0 1px 0 rgb(255 255 255 / .04) inset, 0 12px 32px -12px rgb(0 0 0 / .7);
+  }
+  .btn { @apply inline-flex h-8 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-3 text-[13px] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700; box-shadow: 0 1px 2px rgb(var(--shadow) / .12), inset 0 1px 0 rgb(255 255 255 / .12); }
+  .btn-ghost { @apply btn text-slate-600 hover:bg-slate-100 hover:text-slate-900; }
+  .btn-outline { @apply btn border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900; box-shadow: 0 1px 2px rgb(var(--shadow) / .04); }
+  .label { @apply text-xs font-medium text-slate-500; }
+  .input { @apply h-8 w-full rounded-lg border border-slate-200 bg-white px-2.5 text-[13px] text-slate-800 placeholder:text-slate-400 transition focus:border-brand-500 focus:outline-none focus:ring-[3px] focus:ring-brand-500/15; }
+  textarea.input { @apply h-auto py-2; }
+  .tbl { @apply text-[13px]; }
+  .tbl th { @apply sticky top-0 z-[1] whitespace-nowrap border-b border-slate-200 bg-slate-50 px-4 py-2 text-left text-xs font-medium text-slate-500; }
+  .tbl td { @apply border-b border-slate-100 px-4 py-2.5 align-middle; }
+  .tbl tbody tr:last-child td { @apply border-b-0; }
+  .tbl tbody tr { @apply transition-colors hover:bg-slate-50; }
+  .chip { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium; }
+  /* modal/slide-over backdrop: always a dark dim, in both modes (slate inverts in dark, so never use bg-slate-900/x) */
+  .scrim { background-color: rgb(0 0 0 / .45); }
+  /* neutral metadata tag: email address, filename, count */
+  .pill { @apply inline-flex max-w-[16rem] items-center gap-1 whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600; }
+}
+
+/* `white` is the surface colour (dark in dark mode); text on filled buttons must stay white. */
+.dark .text-white { color: rgb(255 255 255); }
+/* Keep the log console dark in both modes. */
+.dark .bg-slate-900 { background-color: rgb(6 9 9); }
+.dark .bg-slate-900.text-slate-200, .dark .bg-slate-900 .text-slate-200 { color: rgb(var(--slate-800)); }

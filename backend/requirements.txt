@@ -1,0 +1,24 @@
+fastapi==0.162.2
+uvicorn[standard]==0.54.0
+python-multipart==0.0.33
+pydantic==2.14.3
+python-dotenv==1.2.4
+pymupdf==2.1
+rapidfuzz==3.14.6
+pillow==13.0.0
+numpy==2.5.4
+rapidocr==3.10.0
+onnxruntime==1.31.1
+anthropic==2.7.0
+# ai24c-style OpenAI vision extraction (optional at runtime; used only when OPENAI_API_KEY is set)
+openai==2.54.0
+instructor==1.15.1
+# Optional: Google Cloud Vision OCR for scans, as in ai24c. Install only if you set GOOGLE_APPLICATION_CREDENTIALS.
+# google-cloud-vision==3.14.0
+# Intake connectors (app/connectors.py): SFTP, Amazon S3, Google Drive
+paramiko==5.1.0
+boto3==1.43.127
+google-api-python-client==2.201.0
+google-auth==2.62.1
+# Excel (.xlsx) spreadsheet import for POs / vendors / goods receipts
+openpyxl==3.1.5
